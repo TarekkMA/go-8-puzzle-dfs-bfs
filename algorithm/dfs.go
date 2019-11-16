@@ -4,45 +4,12 @@ import (
 	"github.com/tarekkma/go-8-puzzle-dfs-bfs/structs"
 )
 
-func Dfs(initial []int, final []int) *structs.Node {
-	stack := &structs.Stack{}
-	initialNode := structs.NewNode(initial, nil)
-	visitedList := make(map[int]bool)
-
-	markAsVisited := func(n *structs.Node) {
-		visitedList[n.CalcStateHashCode()] = true
+func NewDFS(initial []int, final []int, limit int) *commonStruct {
+	return &commonStruct{
+		store:       &structs.Stack{},
+		initialNode: structs.NewNodeWithMove(initial, nil, "Initial"),
+		GoalNode:    structs.NewNode(final, nil),
+		Limit:       limit,
+		visitedList: make(map[int]bool),
 	}
-	isVisited := func(n *structs.Node) bool {
-		return visitedList[n.CalcStateHashCode()]
-	}
-	addToStackIfUnique := func(n *structs.Node) {
-		if n == nil {
-			return
-		}
-		if isVisited(n) {
-			return
-		}
-		stack.Push(n)
-	}
-	isGoalReached := func(n *structs.Node) bool {
-		return CalcIntArrHashCode(final) == n.CalcStateHashCode()
-	}
-
-	stack.Push(initialNode)
-
-	var goalNode *structs.Node
-	for !stack.IsEmpty() && goalNode == nil {
-		currentNode := stack.Pop()
-		markAsVisited(currentNode)
-		if isGoalReached(currentNode) {
-			goalNode = currentNode
-			break
-		}
-
-		addToStackIfUnique(currentNode.NodeMovedUp())
-		addToStackIfUnique(currentNode.NodeMovedDown())
-		addToStackIfUnique(currentNode.NodeMovedLeft())
-		addToStackIfUnique(currentNode.NodeMovedRight())
-	}
-	return goalNode
 }

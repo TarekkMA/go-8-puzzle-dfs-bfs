@@ -4,46 +4,16 @@ import (
 	"github.com/tarekkma/go-8-puzzle-dfs-bfs/structs"
 )
 
-func Bfs(initial []int, final []int) *structs.Node {
-	queue := &structs.Queue{}
-	initialNode := structs.NewNode(initial, nil)
-	visitedList := make(map[int]bool)
+type bfs struct {
+	commonStruct
+}
 
-	markAsVisited := func(n *structs.Node) {
-		visitedList[n.CalcStateHashCode()] = true
+func NewBFS(initial []int, final []int) *commonStruct {
+	return &commonStruct{
+		store:       &structs.Queue{},
+		initialNode: structs.NewNodeWithMove(initial, nil, "Initial"),
+		GoalNode:    structs.NewNode(final, nil),
+		Limit:       -1,
+		visitedList: make(map[int]bool),
 	}
-	isVisited := func(n *structs.Node) bool {
-		return visitedList[n.CalcStateHashCode()]
-	}
-	addToQueueIfUnique := func(n *structs.Node) {
-		if n == nil {
-			return
-		}
-		if isVisited(n) {
-			return
-		}
-		queue.Enqueue(n)
-	}
-	isGoalReached := func(n *structs.Node) bool {
-		return CalcIntArrHashCode(final) == n.CalcStateHashCode()
-	}
-
-	queue.Enqueue(initialNode)
-
-	var goalNode *structs.Node
-	for !queue.IsEmpty() && goalNode == nil {
-		currentNode := queue.Dequeue()
-		markAsVisited(currentNode)
-		if isGoalReached(currentNode) {
-			goalNode = currentNode
-			break
-		}
-
-		addToQueueIfUnique(currentNode.NodeMovedUp())
-		addToQueueIfUnique(currentNode.NodeMovedDown())
-		addToQueueIfUnique(currentNode.NodeMovedLeft())
-		addToQueueIfUnique(currentNode.NodeMovedRight())
-	}
-
-	return goalNode
 }

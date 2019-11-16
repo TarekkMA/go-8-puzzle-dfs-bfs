@@ -139,3 +139,18 @@ func (n *Node) NodeMovedLeft() *Node {
 	}
 	return nil
 }
+
+func (n *Node) DoAfterEachMovingState(do func(n *Node)) {
+	if node := n.NodeMovedUp(); node != nil {
+		do(node)
+	}
+	if node := n.NodeMovedDown(); node != nil {
+		do(node)
+	}
+	if node := n.NodeMovedLeft(); node != nil {
+		do(node)
+	}
+	if node := n.NodeMovedRight(); node != nil {
+		do(node)
+	}
+}

@@ -23,10 +23,10 @@ func main() {
 	var dfsRes *structs.Node
 
 	measureFunctionTime("BFS", func() {
-		bfsRes = algorithm.Bfs(initial, final)
+		bfsRes = algorithm.NewBFS(initial, final).Excute()
 	})
-	measureFunctionTime("DFS", func() {
-		dfsRes = algorithm.Dfs(initial, final)
+	measureFunctionTime("DFS LIMITED DEAPTH", func() {
+		dfsRes = algorithm.NewDFS(initial, final, -1).Excute()
 	})
 	if dfsRes.CalcStateHashCode() == bfsRes.CalcStateHashCode() {
 		fmt.Println("Same result")
